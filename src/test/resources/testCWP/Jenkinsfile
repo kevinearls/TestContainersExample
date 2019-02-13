@@ -1,0 +1,29 @@
+pipeline {
+    agent any
+    stages {
+        stage('Get System Message') {
+            steps {
+                script {
+                    def instance = Jenkins.get()
+                    def systemMesssage = instance.getSystemMessage()
+                    echo "Message: ${systemMesssage}"
+                }
+            }
+        }
+        stage('Get Plugin Version ') {
+            steps {
+                script {
+                    def cgv = Jenkins.instance.pluginManager.getPlugin("greenballs")
+                    println("${cgv.shortName}:${cgv.version}")
+                }
+            }
+        }
+        stage('Create a file') {
+            steps {
+                echo "Do something here"
+                sh 'touch xyzzy.txt'
+            }
+        }
+    }
+}
+
