@@ -34,6 +34,8 @@ import io.jenkins.tools.warpackager.lib.impl.Builder;
 public class CWPTest {
     // FIXME Change the name. I don't really understand what is the version of
     public static final String VERSION_OF_SOMETHING = "256.0-test";
+    // This is currently the name used by most test images.
+    public static final String JENKINSFILE_RUNNER_TEST_IMAGE = "jenkins-experimental/jenkinsfile-runner-test-image";
 
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
@@ -42,6 +44,8 @@ public class CWPTest {
     public final TestName testName = new TestName();
 
     private final Path resourcesDirectory = Paths.get("src", "test", "resources");
+
+
 
     /**
      * For each tests copy the resource files to a new temporary directory.  The only exception is casc.yml
@@ -83,7 +87,7 @@ public class CWPTest {
     @Test
     public void testCWP() throws Exception {
         // Run the custom-war-packager.  It will create a Dockerfile and other related files
-        // and leave them in temporaryFolger/output
+        // and leave them in temporaryFolder/output
         runCustomWarPackager();
 
         // Build our image.
@@ -91,7 +95,7 @@ public class CWPTest {
 
         // And run it
         String jenkinsfileLocation = resourcesDirectory.toAbsolutePath().toString() + "/" + testName.getMethodName() + "/Jenkinsfile";
-        String output = dockerRun("jenkins-experimental/jenkinsfile-runner-test-image", jenkinsfileLocation, 90, "--no-sandbox");
+        String output = dockerRun(JENKINSFILE_RUNNER_TEST_IMAGE, jenkinsfileLocation, 90, "--no-sandbox");
 
         System.out.println(output);   // TODO remove
 
